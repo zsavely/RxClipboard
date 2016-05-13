@@ -4,6 +4,8 @@ apply plugin: 'com.jfrog.bintray'
 
 def localLibraryVersion = '1.0.0'
 def description = 'RxJava binding APIs for Android\'s clipboard.'
+version = localLibraryVersion
+group = 'com.szagurskii'
 
 android {
   compileSdkVersion 23
@@ -80,8 +82,6 @@ ext {
 
 apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
 
-//version = localLibraryVersion
-
 if (project.hasProperty("android")) { // Android libraries
   task sourcesJar(type: Jar) {
     classifier = 'sources'
@@ -123,14 +123,18 @@ bintray {
     repo = bintrayRepo
     name = bintrayName
     desc = libraryDescription
+    issueTrackerUrl = siteUrl + '/issues'
     websiteUrl = siteUrl
+    githubRepo = 'zsavely/rxclipboard'
+    githubReleaseNotesFile = 'README.md'
     vcsUrl = gitUrl
     licenses = allLicenses
     publish = true
     publicDownloadNumbers = true
 
     version {
-      desc = libraryDescription
+      name = localLibraryVersion
+      vcsTag = 'v' + localLibraryVersion
       gpg {
         sign = true // Determines whether to GPG sign the files. The default is false.
         passphrase = properties.getProperty("bintray.gpg.password")
