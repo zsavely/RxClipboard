@@ -2,6 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
+def isCi = "true".equals(System.getenv("CI"))
 def localLibraryVersion = '1.0.0'
 def description = 'RxJava binding APIs for Android\'s clipboard.'
 version = localLibraryVersion
@@ -56,89 +57,92 @@ dependencies {
   testCompile libraries.mockitoCore
 }
 
-ext {
-  bintrayRepo = 'maven'
-  bintrayName = 'rxclipboard'
+if (!isCi) {
+  ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'rxclipboard'
 
-  publishedGroupId = 'com.szagurskii'
-  libraryName = 'RxClipboard'
-  artifact = 'rxclipboard'
+    publishedGroupId = 'com.szagurskii'
+    libraryName = 'RxClipboard'
+    artifact = 'rxclipboard'
 
-  libraryDescription = description
+    libraryDescription = description
 
-  siteUrl = 'https://github.com/zsavely/RxClipboard'
-  gitUrl = 'https://github.com/zsavely/RxClipboard.git'
+    siteUrl = 'https://github.com/zsavely/RxClipboard'
+    gitUrl = 'https://github.com/zsavely/RxClipboard.git'
 
-  libraryVersion = localLibraryVersion
+    libraryVersion = localLibraryVersion
 
-  developerId = 'zsavely'
-  developerName = 'Savelii Zagurskii'
-  developerEmail = 'saveliyzagurskiy@gmail.com'
+    developerId = 'zsavely'
+    developerName = 'Savelii Zagurskii'
+    developerEmail = 'saveliyzagurskiy@gmail.com'
 
-  licenseName = 'The MIT License (MIT)'
-  licenseUrl = 'https://opensource.org/licenses/MIT'
-  allLicenses = ["MIT"]
-}
-
-apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
-
-if (project.hasProperty("android")) { // Android libraries
-  task sourcesJar(type: Jar) {
-    classifier = 'sources'
-    from android.sourceSets.main.java.srcDirs
+    licenseName = 'The MIT License (MIT)'
+    licenseUrl = 'https://opensource.org/licenses/MIT'
+    allLicenses = ["MIT"]
   }
 
-  task javadoc(type: Javadoc) {
-    source = android.sourceSets.main.java.srcDirs
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-    classpath += configurations.javadocDeps
+
+  apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
+
+  if (project.hasProperty("android")) { // Android libraries
+    task sourcesJar(type: Jar) {
+      classifier = 'sources'
+      from android.sourceSets.main.java.srcDirs
+    }
+
+    task javadoc(type: Javadoc) {
+      source = android.sourceSets.main.java.srcDirs
+      classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+      classpath += configurations.javadocDeps
+    }
+  } else { // Java libraries
+    task sourcesJar(type: Jar, dependsOn: classes) {
+      classifier = 'sources'
+      from sourceSets.main.allSource
+    }
   }
-} else { // Java libraries
-  task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
+
+  task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
   }
-}
 
-task javadocJar(type: Jar, dependsOn: javadoc) {
-  classifier = 'javadoc'
-  from javadoc.destinationDir
-}
+  artifacts {
+    archives javadocJar
+    archives sourcesJar
+  }
 
-artifacts {
-  archives javadocJar
-  archives sourcesJar
-}
+  // Bintray
+  Properties properties = new Properties()
+  properties.load(project.rootProject.file('local.properties').newDataInputStream())
 
-// Bintray
-Properties properties = new Properties()
-properties.load(project.rootProject.file('local.properties').newDataInputStream())
+  bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
 
-bintray {
-  user = properties.getProperty("bintray.user")
-  key = properties.getProperty("bintray.apikey")
+    configurations = ['archives']
+    pkg {
+      repo = bintrayRepo
+      name = bintrayName
+      desc = libraryDescription
+      issueTrackerUrl = siteUrl + '/issues'
+      websiteUrl = siteUrl
+      githubRepo = 'zsavely/rxclipboard'
+      githubReleaseNotesFile = 'README.md'
+      vcsUrl = gitUrl
+      licenses = allLicenses
+      publish = true
+      publicDownloadNumbers = true
 
-  configurations = ['archives']
-  pkg {
-    repo = bintrayRepo
-    name = bintrayName
-    desc = libraryDescription
-    issueTrackerUrl = siteUrl + '/issues'
-    websiteUrl = siteUrl
-    githubRepo = 'zsavely/rxclipboard'
-    githubReleaseNotesFile = 'README.md'
-    vcsUrl = gitUrl
-    licenses = allLicenses
-    publish = true
-    publicDownloadNumbers = true
-
-    version {
-      name = localLibraryVersion
-      vcsTag = 'v' + localLibraryVersion
-      gpg {
-        sign = true // Determines whether to GPG sign the files. The default is false.
-        passphrase = properties.getProperty("bintray.gpg.password")
-        // Optional. The passphrase for GPG signing'.
+      version {
+        name = localLibraryVersion
+        vcsTag = 'v' + localLibraryVersion
+        gpg {
+          sign = true // Determines whether to GPG sign the files. The default is false.
+          passphrase = properties.getProperty("bintray.gpg.password")
+          // Optional. The passphrase for GPG signing'.
+        }
       }
     }
   }
