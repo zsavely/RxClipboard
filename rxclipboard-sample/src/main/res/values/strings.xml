@@ -1,0 +1,5 @@
+<resources>
+  <string name="app_name">RxClipboard</string>
+  <string name="current_clip_none">Current clip: none.</string>
+  <string name="try_changing_clip_here">Try changing clip here</string>
+</resources>

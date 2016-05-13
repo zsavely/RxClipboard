@@ -1,0 +1,10 @@
+<manifest package="com.szagurskii.rxclipboard"
+          xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
+  <uses-permission android:name="android.permission.WAKE_LOCK"/>
+
+  <application>
+    <activity android:name=".RxClipboardTestActivity"/>
+  </application>
+</manifest>
