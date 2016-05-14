@@ -12,7 +12,7 @@ compile 'com.szagurskii:rxclipboard:1.0.0'
 
 ### How to use
 
-In order to start listen to the clipboard updates you need so subscribe to a provided observable. You can observe 6 different types of clipboard changes:
+In order to start listen to the clipboard updates you need to subscribe to a provided observable. You can observe 6 different types of clipboard changes:
 * Plain text
 * Html
 * Plain text OR Html
