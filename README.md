@@ -2,6 +2,8 @@ RxClipboard
 ========
 [![Build Status](https://travis-ci.org/zsavely/RxClipboard.svg?branch=master)](https://travis-ci.org/zsavely/RxClipboard)
 [![Download](https://api.bintray.com/packages/zsavely/maven/rxclipboard/images/download.svg) ](https://bintray.com/zsavely/maven/rxclipboard/_latestVersion)
+[![codecov](https://codecov.io/gh/zsavely/RxClipboard/branch/master/graph/badge.svg)](https://codecov.io/gh/zsavely/RxClipboard)
+<a href="http://www.methodscount.com/?lib=com.szagurskii%3Arxclipboard%3A1.%2B"><img src="https://img.shields.io/badge/Methods and size-core: 92 | deps: 5264 | 16 KB-e91e63.svg"></img></a>
 
 RxJava binding APIs for Android Clipboard.
 
