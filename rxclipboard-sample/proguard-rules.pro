@@ -10,3 +10,13 @@
 -keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueConsumerNodeRef {
     rx.internal.util.atomic.LinkedQueueNode consumerNode;
 }
+
+# Jacoco
+# Keep everything for the emma classes
+-keep class com.vladium.** {
+  *;
+}
+# Keep everything for the jacoco classes
+-keep class org.jacoco.** {
+  *;
+}
