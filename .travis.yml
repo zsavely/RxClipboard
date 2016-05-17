@@ -1,6 +1,8 @@
 sudo: false
+
 language: android
 jdk: oraclejdk8
+
 env:
   global:
     - ANDROID_TARGET=android-21
@@ -17,6 +19,7 @@ android:
 
 before_install:
  - chmod +x gradlew
+ - pip install --user codecov
 
 script:
   - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
@@ -40,3 +43,4 @@ cache:
     
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+  - codecov
