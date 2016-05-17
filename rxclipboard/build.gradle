@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
+apply from: '../jacoco.gradle'
 
 def isCi = "true".equals(System.getenv("CI"))
 def localLibraryVersion = '1.0.0'
@@ -21,6 +22,10 @@ android {
   }
   buildTypes {
     release {
+      testCoverageEnabled true
+    }
+    debug {
+      testCoverageEnabled true
     }
   }
   packagingOptions {
