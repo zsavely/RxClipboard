@@ -1,4 +1,5 @@
 // From https://github.com/mgouline/android-samples/blob/master/jacoco/jacoco.gradle
+// and https://github.com/pushtorefresh/storio/blob/master/gradle/jacoco-android.gradle
 apply plugin: 'jacoco'
 
 jacoco {
@@ -36,7 +37,12 @@ project.afterEvaluate {
                        '**/*$ViewInjector*.*',
                        '**/*$ViewBinder*.*',
                        '**/BuildConfig.*',
-                       '**/Manifest*.*']
+                       '**/Manifest*.*',
+                       '**/*$Lambda$*.*', // Jacoco can not handle several "$" in class name.
+                       '**/*Module.*', // Modules for Dagger.
+                       '**/*Dagger*.*', // Dagger auto-generated code.
+                       '**/*MembersInjector*.*', // Dagger auto-generated code.
+                       '**/*_Provide*Factory*.*'] // Dagger auto-generated code.
         )
 
         def coverageSourceDirs = [
