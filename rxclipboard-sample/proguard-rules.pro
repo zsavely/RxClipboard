@@ -20,3 +20,6 @@
 -keep class org.jacoco.** {
   *;
 }
+
+# Don't warn.
+-dontwarn org.jacoco.**
