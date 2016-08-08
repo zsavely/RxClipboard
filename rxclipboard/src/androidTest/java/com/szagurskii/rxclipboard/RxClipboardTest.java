@@ -17,15 +17,18 @@ import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 
 import static com.google.common.truth.Truth.assertThat;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(AndroidJUnit4.class)
 public class RxClipboardTest {
   @Rule public final ActivityTestRule<RxClipboardTestActivity> activityRule =
@@ -90,7 +93,7 @@ public class RxClipboardTest {
 
     subscription.unsubscribe();
 
-    setClip("Silent", null);
+    setClip("", null);
     o.assertNoMoreEvents();
   }
 
@@ -114,7 +117,7 @@ public class RxClipboardTest {
 
     subscription.unsubscribe();
 
-    setClip("Silent", null);
+    setClip("", null);
     o.assertNoMoreEvents();
   }
 
@@ -156,7 +159,7 @@ public class RxClipboardTest {
     o.assertNoMoreEvents();
   }
 
-  @Test public void nullTextAndHtmlChanges() {
+  @Test public void nullClipChanges() {
     final ClipData initialClipData = ClipData.newPlainText("Label0", "Initial");
     setClip(initialClipData);
     RecordingObserver<ClipData> o = new RecordingObserver<>();
@@ -182,7 +185,7 @@ public class RxClipboardTest {
     o.assertNoMoreEvents();
   }
 
-  @Test public void initialNullTextAndHtmlChanges() {
+  @Test public void initialNullClipChanges() {
     final ClipData initialClipData = ClipData.newPlainText("Label0", null);
     setClip(initialClipData);
     RecordingObserver<ClipData> o = new RecordingObserver<>();
@@ -293,6 +296,74 @@ public class RxClipboardTest {
 
     setHtmlClip("<span style=\"font-size:12px;font-style:italic;\">" +
         "Italic silent font</span> and more...</p>");
+    o.assertNoMoreEvents();
+  }
+
+  @Test public void a1FirstTestWhenDeviceStarts_nullClipData() {
+    RecordingObserver<String> o = new RecordingObserver<>();
+    Subscription subscription = RxClipboard.textChanges(instrumentation.getContext())
+        .subscribeOn(AndroidSchedulers.mainThread())
+        .subscribe(o);
+    o.assertNoMoreEvents();
+  }
+
+  @Test public void a2SecondTestWhenDeviceStarts_nullClipData() {
+    RecordingObserver<Intent> o = new RecordingObserver<>();
+    Subscription subscription = RxClipboard.intentChanges(instrumentation.getContext())
+        .subscribeOn(AndroidSchedulers.mainThread())
+        .subscribe(o);
+    o.assertNoMoreEvents();
+  }
+
+  @Test public void a3ThirdTestWhenDeviceStarts_nullClipData() {
+    RecordingObserver<Uri> o = new RecordingObserver<>();
+    Subscription subscription = RxClipboard.uriChanges(instrumentation.getContext())
+        .subscribeOn(AndroidSchedulers.mainThread())
+        .subscribe(o);
+    o.assertNoMoreEvents();
+  }
+
+  @Test public void a4FourthTestWhenDeviceStarts_nullClipData() {
+    RecordingObserver<ClipData> o = new RecordingObserver<>();
+    Subscription subscription = RxClipboard.clipChanges(instrumentation.getContext())
+        .subscribeOn(AndroidSchedulers.mainThread())
+        .subscribe(o);
+    o.assertNoMoreEvents();
+  }
+
+  @Test public void a5FifthTestWhenDeviceStarts_nullClipData() {
+    RecordingObserver<String> o = new RecordingObserver<>();
+    Subscription subscription = RxClipboard.htmlChanges(instrumentation.getContext())
+        .subscribeOn(AndroidSchedulers.mainThread())
+        .subscribe(o);
+    o.assertNoMoreEvents();
+  }
+
+  @Test public void a6SixthTestWhenDeviceStarts_nullClipData() {
+    RecordingObserver<String> o = new RecordingObserver<>();
+    Subscription subscription = RxClipboard.textAndHtmlChanges(instrumentation.getContext())
+        .subscribeOn(AndroidSchedulers.mainThread())
+        .subscribe(o);
+    o.assertNoMoreEvents();
+  }
+
+  @Test public void shouldNotCallMethodIfUnsubscribed() {
+    setClip("Initial");
+    RecordingObserver<String> o = new RecordingObserver<>();
+    Subscription subscription = RxClipboard.textChanges(instrumentation.getContext())
+        .subscribeOn(AndroidSchedulers.mainThread())
+        .subscribe(o);
+    assertThat(o.takeNext()).isEqualTo("Initial");
+
+    setAndAssert(o, "Next");
+    setAndAssert(o, "Stuff");
+    setAndAssert(o, "Works?");
+
+    subscription.unsubscribe();
+    subscription.unsubscribe(); // Should not remove Clip listener twice.
+    subscription.unsubscribe(); // Should not remove Clip listener.
+
+    setClip("Silent");
     o.assertNoMoreEvents();
   }
 

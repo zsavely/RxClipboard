@@ -59,6 +59,7 @@ dependencies {
   androidTestCompile libraries.espressoContrib
   androidTestCompile libraries.awaitility
 
+  testCompile libraries.junit
   testCompile libraries.truth
   testCompile libraries.robolectric
   testCompile libraries.assertJ
