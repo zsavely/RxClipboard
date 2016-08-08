@@ -36,6 +36,17 @@ android {
   lintOptions {
     disable 'MissingPermission'
   }
+  testOptions {
+    unitTests.all {
+      jacoco {
+        includeNoLocationClasses = true
+      }
+      testLogging {
+        events 'passed', 'skipped', 'failed', 'standardOut', 'standardError'
+        exceptionFormat 'full'
+      }
+    }
+  }
 }
 
 configurations {
