@@ -22,7 +22,7 @@ public class PreconditionsTests {
 
   @Test
   public void shouldReturnTheSame() {
-    String what = Preconditions.checkNotNull("Hey", "Method should throw NullPointer.");
+    String what = Preconditions.checkNotNull("Hey", "Not-null");
     assertThat(what).isEqualTo("Hey");
   }
 }
