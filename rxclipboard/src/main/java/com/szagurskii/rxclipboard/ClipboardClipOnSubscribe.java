@@ -3,6 +3,7 @@ package com.szagurskii.rxclipboard;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ClipboardManager.OnPrimaryClipChangedListener;
+import android.support.annotation.NonNull;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -11,9 +12,9 @@ import rx.Subscriber;
  * @author Savelii Zagurskii
  */
 final class ClipboardClipOnSubscribe implements Observable.OnSubscribe<ClipData> {
-  private final ClipboardManager clipboard;
+  @NonNull private final ClipboardManager clipboard;
 
-  public ClipboardClipOnSubscribe(ClipboardManager clipboard) {
+  public ClipboardClipOnSubscribe(@NonNull ClipboardManager clipboard) {
     this.clipboard = clipboard;
   }
 
@@ -36,7 +37,7 @@ final class ClipboardClipOnSubscribe implements Observable.OnSubscribe<ClipData>
     propagate(subscriber);
   }
 
-  private void propagate(Subscriber<? super ClipData> subscriber) {
+  private void propagate(@NonNull Subscriber<? super ClipData> subscriber) {
     if (clipboard.hasPrimaryClip()) {
       subscriber.onNext(clipboard.getPrimaryClip());
     }

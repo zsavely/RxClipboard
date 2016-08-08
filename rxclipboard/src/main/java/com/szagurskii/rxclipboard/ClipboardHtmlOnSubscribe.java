@@ -5,6 +5,7 @@ import android.content.ClipDescription;
 import android.content.ClipboardManager;
 import android.content.ClipboardManager.OnPrimaryClipChangedListener;
 import android.os.Build;
+import android.support.annotation.NonNull;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -13,9 +14,9 @@ import rx.Subscriber;
  * @author Savelii Zagurskii
  */
 final class ClipboardHtmlOnSubscribe implements Observable.OnSubscribe<String> {
-  private final ClipboardManager clipboard;
+  @NonNull private final ClipboardManager clipboard;
 
-  public ClipboardHtmlOnSubscribe(ClipboardManager clipboard) {
+  public ClipboardHtmlOnSubscribe(@NonNull ClipboardManager clipboard) {
     this.clipboard = clipboard;
   }
 
@@ -38,7 +39,7 @@ final class ClipboardHtmlOnSubscribe implements Observable.OnSubscribe<String> {
     propagate(subscriber);
   }
 
-  private void propagate(Subscriber<? super String> subscriber) {
+  private void propagate(@NonNull Subscriber<? super String> subscriber) {
     if (clipboard.hasPrimaryClip()) {
       ClipData cd = clipboard.getPrimaryClip();
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
