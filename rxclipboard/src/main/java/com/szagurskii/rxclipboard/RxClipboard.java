@@ -82,6 +82,5 @@ public final class RxClipboard {
   }
 
   private RxClipboard() {
-    throw new AssertionError("No instances.");
   }
 }
