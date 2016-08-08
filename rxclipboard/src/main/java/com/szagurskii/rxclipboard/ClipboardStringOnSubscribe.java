@@ -53,10 +53,9 @@ final class ClipboardStringOnSubscribe implements Observable.OnSubscribe<String>
       if (cd.getDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
         CharSequence clip = cd.getItemAt(0).getText();
         subscriber.onNext(clip == null ? "" : clip.toString());
-      } else if (cd.getDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_HTML)) {
-        if (propagateHtml && JB) {
-          subscriber.onNext(cd.getItemAt(0).getHtmlText());
-        }
+      } else if (propagateHtml && JB && cd.getDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_HTML)) {
+        String htmlText = cd.getItemAt(0).getHtmlText();
+        subscriber.onNext(htmlText == null ? "" : htmlText);
       }
     }
   }

@@ -121,6 +121,102 @@ public class RxClipboardTest {
     o.assertNoMoreEvents();
   }
 
+  @Test public void nullTextAndHtmlChanges() {
+    setClip("Initial");
+    RecordingObserver<String> o = new RecordingObserver<>();
+    Subscription subscription = RxClipboard.textAndHtmlChanges(instrumentation.getContext())
+        .subscribeOn(AndroidSchedulers.mainThread())
+        .subscribe(o);
+    assertThat(o.takeNext()).isEqualTo("Initial");
+
+    setAndAssert(o, "Next");
+    setAndAssert(o, null, "");
+    setAndAssert(o, null, "");
+    setAndAssert(o, "Stuff");
+    setAndAssert(o, null, "");
+    setAndAssert(o, null, "");
+    setAndAssert(o, "Works?");
+    setAndAssert(o, null, "");
+    setAndAssert(o, null, "");
+
+    subscription.unsubscribe();
+
+    setClip("", null);
+    o.assertNoMoreEvents();
+  }
+
+  @Test public void initialNullTextAndHtmlChanges() {
+    setClip("Initial", null);
+    RecordingObserver<String> o = new RecordingObserver<>();
+    Subscription subscription = RxClipboard.textAndHtmlChanges(instrumentation.getContext())
+        .subscribeOn(AndroidSchedulers.mainThread())
+        .subscribe(o);
+    assertThat(o.takeNext()).isEqualTo("");
+
+    setAndAssert(o, "Next");
+    setAndAssert(o, null, "");
+    setAndAssert(o, null, "");
+    setAndAssert(o, "Stuff");
+    setAndAssert(o, null, "");
+    setAndAssert(o, null, "");
+    setAndAssert(o, "Works?");
+    setAndAssert(o, null, "");
+    setAndAssert(o, null, "");
+
+    subscription.unsubscribe();
+
+    setClip("", null);
+    o.assertNoMoreEvents();
+  }
+
+  @Test public void nullHtmlChanges() {
+    setHtmlClip("Initial");
+    RecordingObserver<String> o = new RecordingObserver<>();
+    Subscription subscription = RxClipboard.htmlChanges(instrumentation.getContext())
+        .subscribeOn(AndroidSchedulers.mainThread())
+        .subscribe(o);
+    assertThat(o.takeNext()).isEqualTo("Initial");
+
+    setHtmlAndAssert(o, "Next");
+    setHtmlAndAssert(o, null, "");
+    setHtmlAndAssert(o, null, "");
+    setHtmlAndAssert(o, "Stuff");
+    setHtmlAndAssert(o, null, "");
+    setHtmlAndAssert(o, null, "");
+    setHtmlAndAssert(o, "Works?");
+    setHtmlAndAssert(o, null, "");
+    setHtmlAndAssert(o, null, "");
+
+    subscription.unsubscribe();
+
+    setClip("", null);
+    o.assertNoMoreEvents();
+  }
+
+  @Test public void initialNullHtmlChanges() {
+    setHtmlClip("Initial", null);
+    RecordingObserver<String> o = new RecordingObserver<>();
+    Subscription subscription = RxClipboard.htmlChanges(instrumentation.getContext())
+        .subscribeOn(AndroidSchedulers.mainThread())
+        .subscribe(o);
+    assertThat(o.takeNext()).isEqualTo("");
+
+    setHtmlAndAssert(o, "Next");
+    setHtmlAndAssert(o, null, "");
+    setHtmlAndAssert(o, null, "");
+    setHtmlAndAssert(o, "Stuff");
+    setHtmlAndAssert(o, null, "");
+    setHtmlAndAssert(o, null, "");
+    setHtmlAndAssert(o, "Works?");
+    setHtmlAndAssert(o, null, "");
+    setHtmlAndAssert(o, null, "");
+
+    subscription.unsubscribe();
+
+    setClip("", null);
+    o.assertNoMoreEvents();
+  }
+
   @Test public void textAndHtmlChanges() {
     setClip("Initial");
     RecordingObserver<String> o = new RecordingObserver<>();
@@ -402,6 +498,11 @@ public class RxClipboardTest {
     assertThat(o.takeNext()).isEqualTo(value);
   }
 
+  void setHtmlAndAssert(RecordingObserver<String> o, final String value, final String assertionString) {
+    setHtmlClip(value);
+    assertThat(o.takeNext()).isEqualTo(assertionString);
+  }
+
   private void assertClipData(RecordingObserver<ClipData> o, ClipData value) {
     assertThat(o.takeNext().toString()).isEqualTo(value.toString());
   }
@@ -436,5 +537,9 @@ public class RxClipboardTest {
 
   @TargetApi(Build.VERSION_CODES.JELLY_BEAN) void setHtmlClip(@NonNull String clip) {
     setClip(ClipData.newHtmlText("Html", "Basic", clip));
+  }
+
+  @TargetApi(Build.VERSION_CODES.JELLY_BEAN) void setHtmlClip(@NonNull String label, @Nullable String clip) {
+    setClip(ClipData.newHtmlText(label, clip, clip));
   }
 }

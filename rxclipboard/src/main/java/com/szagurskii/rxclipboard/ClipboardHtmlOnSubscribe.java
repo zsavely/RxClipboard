@@ -41,9 +41,10 @@ final class ClipboardHtmlOnSubscribe implements Observable.OnSubscribe<String> {
   private void propagate(Subscriber<? super String> subscriber) {
     if (clipboard.hasPrimaryClip()) {
       ClipData cd = clipboard.getPrimaryClip();
-      if (cd.getDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_HTML)) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-          subscriber.onNext(cd.getItemAt(0).getHtmlText());
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+        if (cd.getDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_HTML)) {
+          String htmlText = cd.getItemAt(0).getHtmlText();
+          subscriber.onNext(htmlText == null ? "" : htmlText);
         }
       }
     }
