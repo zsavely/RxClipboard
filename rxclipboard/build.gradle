@@ -103,7 +103,6 @@ if (!isCi) {
     allLicenses = ["MIT"]
   }
 
-
   apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
 
   if (project.hasProperty("android")) {
