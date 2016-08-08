@@ -20,8 +20,7 @@ public class PreconditionsTests {
     Preconditions.checkNotNull(null, "Method should throw NullPointer.");
   }
 
-  @Test
-  public void shouldReturnTheSame() {
+  @Test public void shouldReturnTheSame() {
     String what = Preconditions.checkNotNull("Hey", "Not-null");
     assertThat(what).isEqualTo("Hey");
   }
