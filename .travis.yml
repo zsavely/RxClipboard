@@ -35,7 +35,7 @@ script:
   - ANDROID_SERIAL='emulator-5556'
   - echo no | android create avd --force -n test2 -t $ANDROID_TARGET2 --abi $ANDROID_ABI
   - emulator -avd test2 -no-skin -no-audio -no-window &
-  - android-wait-for-emulator
+  - adb wait-for-device
   - adb -s ${ANDROID_SERIAL} shell setprop dalvik.vm.dexopt-flags v=n,o=v
   - "./gradlew connectedAndroidTest -PdisablePreDex"
   - "adb -s ${ANDROID_SERIAL} emu kill"
