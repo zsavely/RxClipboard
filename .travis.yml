@@ -22,7 +22,7 @@ android:
 before_install:
  - chmod +x gradlew
  - export ANDROID_SERIAL='emulator-5554'
- - pip install --user codecov.
+ - pip install --user codecov
 
 script:
   - echo no | android create avd --force -n test1 -t $ANDROID_TARGET1 --abi $ANDROID_ABI
