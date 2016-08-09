@@ -1,5 +1,6 @@
 package com.szagurskii.rxclipboard;
 
+import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.ClipDescription;
 import android.content.ClipboardManager;
@@ -14,6 +15,8 @@ import rx.Subscriber;
  * @author Savelii Zagurskii
  */
 final class ClipboardHtmlOnSubscribe implements Observable.OnSubscribe<String> {
+  private static final boolean JB = Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN;
+
   @NonNull private final ClipboardManager clipboard;
 
   public ClipboardHtmlOnSubscribe(@NonNull ClipboardManager clipboard) {
@@ -39,10 +42,10 @@ final class ClipboardHtmlOnSubscribe implements Observable.OnSubscribe<String> {
     propagate(subscriber);
   }
 
-  private void propagate(@NonNull Subscriber<? super String> subscriber) {
+  @SuppressLint("NewApi") private void propagate(@NonNull Subscriber<? super String> subscriber) {
     if (clipboard.hasPrimaryClip()) {
       ClipData cd = clipboard.getPrimaryClip();
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+      if (JB) {
         if (cd.getDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_HTML)) {
           String htmlText = cd.getItemAt(0).getHtmlText();
           subscriber.onNext(htmlText == null ? "" : htmlText);
