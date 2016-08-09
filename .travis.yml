@@ -27,12 +27,12 @@ script:
   - echo no | android create avd --force -n test1 -t $ANDROID_TARGET1 --abi $ANDROID_ABI
   - emulator -avd test1 -no-skin -no-audio -no-window &
   - android-wait-for-emulator
-  - adb shell input keyevent 82 &
+  - adb -s test1 shell setprop dalvik.vm.dexopt-flags v=n,o=v
 
   - echo no | android create avd --force -n test2 -t $ANDROID_TARGET2 --abi $ANDROID_ABI
   - emulator -avd test2 -no-skin -no-audio -no-window &
   - android-wait-for-emulator
-  - adb shell input keyevent 82 &
+  - adb -s test2 shell setprop dalvik.vm.dexopt-flags v=n,o=v
 
   - sh script.sh
 
