@@ -427,12 +427,9 @@ public class RxClipboardTest {
     assertThat(o.takeNext().getItemAt(0).getText()).isEqualTo(null);
 
     setAndAssert(o, ClipData.newPlainText("Label1", null));
-    setAndAssert(o, ClipData.newPlainText("Label2", null));
     setAndAssert(o, ClipData.newPlainText("Label3", "Stuff"));
     setAndAssert(o, ClipData.newPlainText("Label4", null));
-    setAndAssert(o, ClipData.newPlainText("Label5", null));
     setAndAssert(o, ClipData.newPlainText("Label6", "Works?"));
-    setAndAssert(o, ClipData.newPlainText("Label7", null));
     setAndAssert(o, ClipData.newPlainText("Label9", null));
     setAndAssert(o, ClipData.newPlainText("Label10", "Works?"));
     setAndAssert(o, ClipData.newPlainText("Label11", null));
