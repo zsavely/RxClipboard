@@ -1,6 +1,6 @@
 ext.versions = [
-    rxJava                  : '1.1.5',
-    rxAndroid               : '1.2.0',
+    rxJava                  : '1.1.8',
+    rxAndroid               : '1.2.1',
 
     supportLibs             : '23.3.0',
 
