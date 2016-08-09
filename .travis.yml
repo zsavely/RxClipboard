@@ -19,6 +19,7 @@ android:
 
 before_install:
  - chmod +x gradlew
+ - pip install --user codecov
 
 script:
   - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
@@ -41,4 +42,4 @@ cache:
     - $HOME/.gradle/wrapper/
     
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+- codecov
