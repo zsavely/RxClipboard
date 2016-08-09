@@ -40,7 +40,6 @@ script:
   - "./gradlew connectedAndroidTest -PdisablePreDex"
   - "adb -s ${ANDROID_SERIAL} emu kill"
 
-
 notifications:
   email: true
 
