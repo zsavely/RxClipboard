@@ -257,12 +257,9 @@ public class RxClipboardTest {
 
     setAndAssert(o, "Next");
     setAndAssert(o, null, "");
-    setAndAssert(o, null, "");
     setAndAssert(o, "Stuff");
     setAndAssert(o, null, "");
-    setAndAssert(o, null, "");
     setAndAssert(o, "Works?");
-    setAndAssert(o, null, "");
     setAndAssert(o, null, "");
 
     subscription.unsubscribe();
@@ -281,12 +278,9 @@ public class RxClipboardTest {
 
     setAndAssert(o, "Next");
     setAndAssert(o, null, "");
-    setAndAssert(o, null, "");
     setAndAssert(o, "Stuff");
     setAndAssert(o, null, "");
-    setAndAssert(o, null, "");
     setAndAssert(o, "Works?");
-    setAndAssert(o, null, "");
     setAndAssert(o, null, "");
 
     subscription.unsubscribe();
@@ -305,12 +299,9 @@ public class RxClipboardTest {
 
     setHtmlAndAssert(o, "Next");
     setHtmlAndAssert(o, null, "");
-    setHtmlAndAssert(o, null, "");
     setHtmlAndAssert(o, "Stuff");
     setHtmlAndAssert(o, null, "");
-    setHtmlAndAssert(o, null, "");
     setHtmlAndAssert(o, "Works?");
-    setHtmlAndAssert(o, null, "");
     setHtmlAndAssert(o, null, "");
 
     subscription.unsubscribe();
@@ -329,13 +320,10 @@ public class RxClipboardTest {
     assertThat(o.takeNext().getItemAt(0).getText()).isEqualTo("Initial");
 
     setAndAssert(o, ClipData.newPlainText("Label1", null));
-    setAndAssert(o, ClipData.newPlainText("Label2", null));
     setAndAssert(o, ClipData.newPlainText("Label3", "Stuff"));
-    setAndAssert(o, ClipData.newPlainText("Label4", null));
     setAndAssert(o, ClipData.newPlainText("Label5", null));
     setAndAssert(o, ClipData.newPlainText("Label6", "Works?"));
     setAndAssert(o, ClipData.newPlainText("Label7", null));
-    setAndAssert(o, ClipData.newPlainText("Label9", null));
     setAndAssert(o, ClipData.newPlainText("Label10", "Works?"));
     setAndAssert(o, ClipData.newPlainText("Label11", null));
 
@@ -355,12 +343,9 @@ public class RxClipboardTest {
 
     setAndAssert(o, "Next");
     setAndAssert(o, null, "");
-    setAndAssert(o, null, "");
     setAndAssert(o, "Stuff");
     setAndAssert(o, null, "");
-    setAndAssert(o, null, "");
     setAndAssert(o, "Works?");
-    setAndAssert(o, null, "");
     setAndAssert(o, null, "");
 
     subscription.unsubscribe();
@@ -379,12 +364,9 @@ public class RxClipboardTest {
 
     setAndAssert(o, "Next");
     setAndAssert(o, null, "");
-    setAndAssert(o, null, "");
     setAndAssert(o, "Stuff");
     setAndAssert(o, null, "");
-    setAndAssert(o, null, "");
     setAndAssert(o, "Works?");
-    setAndAssert(o, null, "");
     setAndAssert(o, null, "");
 
     subscription.unsubscribe();
@@ -403,12 +385,9 @@ public class RxClipboardTest {
 
     setHtmlAndAssert(o, "Next");
     setHtmlAndAssert(o, null, "");
-    setHtmlAndAssert(o, null, "");
     setHtmlAndAssert(o, "Stuff");
     setHtmlAndAssert(o, null, "");
-    setHtmlAndAssert(o, null, "");
     setHtmlAndAssert(o, "Works?");
-    setHtmlAndAssert(o, null, "");
     setHtmlAndAssert(o, null, "");
 
     subscription.unsubscribe();
