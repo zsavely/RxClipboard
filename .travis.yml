@@ -21,24 +21,17 @@ android:
 
 before_install:
  - chmod +x gradlew
- - export ANDROID_SERIAL='emulator-5554'
  - pip install --user codecov
 
 script:
   - echo no | android create avd --force -n test1 -t $ANDROID_TARGET1 --abi $ANDROID_ABI
-  - emulator -avd test1 -no-skin -no-audio -no-window &
-  - android-wait-for-emulator
-  - adb -s ${ANDROID_SERIAL} shell setprop dalvik.vm.dexopt-flags v=n,o=v
-  - sh script.sh
-  - "adb -s ${ANDROID_SERIAL} emu kill"
-
-  - ANDROID_SERIAL='emulator-5556'
   - echo no | android create avd --force -n test2 -t $ANDROID_TARGET2 --abi $ANDROID_ABI
+  - emulator -avd test1 -no-skin -no-audio -no-window &
   - emulator -avd test2 -no-skin -no-audio -no-window &
-  - adb wait-for-device
-  - adb -s ${ANDROID_SERIAL} shell setprop dalvik.vm.dexopt-flags v=n,o=v
-  - "./gradlew connectedAndroidTest -PdisablePreDex"
-  - "adb -s ${ANDROID_SERIAL} emu kill"
+  - android-wait-for-emulator
+  - adb -s emulator-5554 shell setprop dalvik.vm.dexopt-flags v=n,o=v
+  - adb -s emulator-5556 shell setprop dalvik.vm.dexopt-flags v=n,o=v
+  - sh script.sh
 
 notifications:
   email: true
