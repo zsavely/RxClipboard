@@ -32,4 +32,3 @@ test:
     - adb shell input keyevent 82
     # run the script
     - sh scripts/script.sh
-    - pip install --user codecov && codecov

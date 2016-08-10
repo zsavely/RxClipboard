@@ -31,24 +31,35 @@ script:
 
     # Start the first emulator.
   - emulator -avd test1 -no-skin -no-audio -no-window &
-  - sh scripts/wait-for-first-emulator.sh
+  - sh scripts/wait-for-emulator.sh
 
     # Just to check whether the device is seen by ADB.
   - "adb devices"
 
-    # Start the second emulator.
-  - emulator -avd test2 -no-skin -no-audio -no-window &
-  - sh scripts/wait-for-second-emulator.sh
-
-    # Just to check whether the device is seen by ADB.
-  - "adb devices"
-
-    # Unlock the devices.
+    # Unlock the device.
   - adb -s emulator-5554 shell input keyevent 82 &
-  - adb -s emulator-5556 shell input keyevent 82 &
 
     # Run the script.
   - sh scripts/script.sh
+
+    # Move the coverage report from the first device.
+  - sh scripts/move-coverage-report.sh
+
+    # Kill the first emulator.
+  - sh scripts/kill-first-emulator.sh
+
+    # Start the second emulator.
+  - emulator -avd test2 -no-skin -no-audio -no-window &
+  - sh scripts/wait-for-emulator.sh
+
+    # Just to check whether the device is seen by ADB.
+  - "adb devices"
+
+    # Unlock the device.
+  - adb -s emulator-5554 shell input keyevent 82 &
+
+    # Run tests on another device.
+  - sh scripts/script-just-ui.sh
 
 notifications:
   email: true
