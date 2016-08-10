@@ -513,7 +513,7 @@ public class RxClipboardTest {
     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
       assertThat(o.takeNext().toString()).isEqualTo(value.toString());
     } else {
-      assertThat(o.takeNext().getItemAt(0)).isEqualTo(value.getItemAt(0));
+      assertThat(o.takeNext().getItemAt(0).getText()).isEqualTo(value.getItemAt(0).getText());
     }
   }
 
