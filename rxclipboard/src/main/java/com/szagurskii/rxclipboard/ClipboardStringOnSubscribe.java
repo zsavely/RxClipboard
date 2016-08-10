@@ -6,6 +6,7 @@ import android.content.ClipDescription;
 import android.content.ClipboardManager;
 import android.content.ClipboardManager.OnPrimaryClipChangedListener;
 import android.os.Build;
+import android.support.annotation.NonNull;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -16,14 +17,14 @@ import rx.Subscriber;
 final class ClipboardStringOnSubscribe implements Observable.OnSubscribe<String> {
   private static final boolean JB = Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN;
 
-  private final ClipboardManager clipboard;
+  @NonNull private final ClipboardManager clipboard;
   private final boolean propagateHtml;
 
-  public ClipboardStringOnSubscribe(ClipboardManager clipboard) {
+  public ClipboardStringOnSubscribe(@NonNull ClipboardManager clipboard) {
     this(clipboard, false);
   }
 
-  public ClipboardStringOnSubscribe(ClipboardManager clipboard, boolean propagateHtml) {
+  public ClipboardStringOnSubscribe(@NonNull ClipboardManager clipboard, boolean propagateHtml) {
     this.clipboard = clipboard;
     this.propagateHtml = propagateHtml;
   }
@@ -47,7 +48,7 @@ final class ClipboardStringOnSubscribe implements Observable.OnSubscribe<String>
     propagate(subscriber);
   }
 
-  @SuppressLint("NewApi") private void propagate(Subscriber<? super String> subscriber) {
+  @SuppressLint("NewApi") private void propagate(@NonNull Subscriber<? super String> subscriber) {
     if (clipboard.hasPrimaryClip()) {
       ClipData cd = clipboard.getPrimaryClip();
       if (cd.getDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {

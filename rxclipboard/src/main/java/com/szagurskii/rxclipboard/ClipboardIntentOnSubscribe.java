@@ -5,6 +5,7 @@ import android.content.ClipDescription;
 import android.content.ClipboardManager;
 import android.content.ClipboardManager.OnPrimaryClipChangedListener;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -13,9 +14,9 @@ import rx.Subscriber;
  * @author Savelii Zagurskii
  */
 final class ClipboardIntentOnSubscribe implements Observable.OnSubscribe<Intent> {
-  private final ClipboardManager clipboard;
+  @NonNull private final ClipboardManager clipboard;
 
-  public ClipboardIntentOnSubscribe(ClipboardManager clipboard) {
+  public ClipboardIntentOnSubscribe(@NonNull ClipboardManager clipboard) {
     this.clipboard = clipboard;
   }
 
@@ -38,7 +39,7 @@ final class ClipboardIntentOnSubscribe implements Observable.OnSubscribe<Intent>
     propagate(subscriber);
   }
 
-  private void propagate(Subscriber<? super Intent> subscriber) {
+  private void propagate(@NonNull Subscriber<? super Intent> subscriber) {
     if (clipboard.hasPrimaryClip()) {
       ClipData cd = clipboard.getPrimaryClip();
       if (cd.getDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_INTENT)) {

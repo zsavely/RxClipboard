@@ -5,6 +5,7 @@ import android.content.ClipDescription;
 import android.content.ClipboardManager;
 import android.content.ClipboardManager.OnPrimaryClipChangedListener;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -13,9 +14,9 @@ import rx.Subscriber;
  * @author Savelii Zagurskii
  */
 final class ClipboardUriOnSubscribe implements Observable.OnSubscribe<Uri> {
-  private final ClipboardManager clipboard;
+  @NonNull private final ClipboardManager clipboard;
 
-  public ClipboardUriOnSubscribe(ClipboardManager clipboard) {
+  public ClipboardUriOnSubscribe(@NonNull ClipboardManager clipboard) {
     this.clipboard = clipboard;
   }
 
@@ -38,7 +39,7 @@ final class ClipboardUriOnSubscribe implements Observable.OnSubscribe<Uri> {
     propagate(subscriber);
   }
 
-  private void propagate(Subscriber<? super Uri> subscriber) {
+  private void propagate(@NonNull Subscriber<? super Uri> subscriber) {
     if (clipboard.hasPrimaryClip()) {
       ClipData cd = clipboard.getPrimaryClip();
       if (cd.getDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_URILIST)) {

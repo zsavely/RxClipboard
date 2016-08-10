@@ -24,9 +24,9 @@ In order to start listen to the clipboard updates you need to subscribe to a pro
 
 ```java
 // Subscribing to text changes updates.
-RxClipboard.textChanges(this)
+Subscription subscriptionTextChanges = RxClipboard.textChanges(this)
     .observeOn(AndroidSchedulers.mainThread())
-    .subscribe(new Subscriber<String>() {
+    .subscribe(new Observer<String>() {
       @Override public void onCompleted() {
         Log.d(TAG, "onCompleted()");
       }
@@ -39,9 +39,9 @@ RxClipboard.textChanges(this)
     });
 
 // Subscribing to clip changes updates.
-RxClipboard.clipChanges(this)
+Subscription subscriptionClipChanges = RxClipboard.clipChanges(this)
     .observeOn(AndroidSchedulers.mainThread())
-    .subscribe(new Subscriber<ClipData>() {
+    .subscribe(new Observer<ClipData>() {
       @Override public void onCompleted() {
         Log.d(TAG, "onCompleted()");
       }
