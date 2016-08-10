@@ -11,10 +11,11 @@ env:
 
 android:
   components:
-    - platform-tools
     - tools
-    - android-23
-    - build-tools-23.0.3
+    - tools
+    - platform-tools
+    - android-24
+    - build-tools-24.0.1
     - extra-android-m2repository
     - sys-img-${ANDROID_ABI}-${ANDROID_TARGET1}
     - sys-img-${ANDROID_ABI}-${ANDROID_TARGET2}
@@ -24,16 +25,29 @@ before_install:
  - pip install --user codecov
 
 script:
+    # Create two emulator avds.
   - echo no | android create avd --force -n test1 -t ${ANDROID_TARGET1} --abi ${ANDROID_ABI}
   - echo no | android create avd --force -n test2 -t ${ANDROID_TARGET2} --abi ${ANDROID_ABI}
+
+    # Start the first emulator.
   - emulator -avd test1 -no-skin -no-audio -no-window &
   - sh scripts/wait-for-first-emulator.sh
+
+    # Just to check whether the device is seen by ADB.
   - "adb devices"
+
+    # Start the second emulator.
   - emulator -avd test2 -no-skin -no-audio -no-window &
   - sh scripts/wait-for-second-emulator.sh
+
+    # Just to check whether the device is seen by ADB.
   - "adb devices"
-  - adb -s emulator-5554 shell setprop dalvik.vm.dexopt-flags v=n,o=v
-  - adb -s emulator-5556 shell setprop dalvik.vm.dexopt-flags v=n,o=v
+
+    # Unlock the devices.
+  - adb -s emulator-5554 shell input keyevent 82 &
+  - adb -s emulator-5556 shell input keyevent 82 &
+
+    # Run the script.
   - sh scripts/script.sh
 
 notifications:

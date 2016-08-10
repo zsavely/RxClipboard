@@ -2,7 +2,7 @@ ext.versions = [
     rxJava                  : '1.1.8',
     rxAndroid               : '1.2.1',
 
-    supportLibs             : '23.3.0',
+    supportLibs             : '24.1.1',
 
     androidBuildTools       : '2.1.2',
     androidMavenGradlePlugin: '1.3',
