@@ -61,6 +61,9 @@ script:
     # Run tests on another device.
   - sh scripts/script-just-ui.sh
 
+    # Move the coverage report from the first device back to the debug folder.
+  - sh scripts/move-coverage-report-back.sh
+
 notifications:
   email: true
 
@@ -73,6 +76,6 @@ cache:
     - $HOME/.gradle
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
-    
+
 after_success:
 - codecov
