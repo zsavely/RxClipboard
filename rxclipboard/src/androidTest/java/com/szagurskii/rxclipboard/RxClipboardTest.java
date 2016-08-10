@@ -128,12 +128,12 @@ public class RxClipboardTest {
     assertThat(o.takeNext()).isEqualTo("Initial");
 
     setAndAssert(o, "Next");
-    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+    if (android.os.Build.VERSION.SDK_INT >= 16) {
       setHtmlAndAssert(o, "<p>Example</p>");
     }
 
     setAndAssert(o, "Stuff");
-    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+    if (android.os.Build.VERSION.SDK_INT >= 16) {
       setHtmlAndAssert(o, "<ol><li>HTML Examples</li></ol>");
     }
 
@@ -144,7 +144,7 @@ public class RxClipboardTest {
   }
 
   @Test public void clipChangesWithHtml() {
-    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+    if (android.os.Build.VERSION.SDK_INT >= 16) {
       ClipData initialClipData = ClipData.newHtmlText("Label0", "This is a Heading",
           "<!DOCTYPE html><html><head><title>Page Title</title></head><body><h1>This is a " +
               "Heading</h1><p>This is a paragraph.</p></body></html>");
@@ -215,7 +215,7 @@ public class RxClipboardTest {
   }
 
   @Test public void htmlChanges() {
-    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+    if (android.os.Build.VERSION.SDK_INT >= 16) {
       final String initialHtml = "<p><a href=\"https://www.google.com/\">Example Link</a></p>";
       setHtmlClip(initialHtml);
       RecordingObserver<String> o = new RecordingObserver<>();
@@ -299,7 +299,7 @@ public class RxClipboardTest {
   }
 
   @Test public void nullHtmlChanges() {
-    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+    if (android.os.Build.VERSION.SDK_INT >= 16) {
       setHtmlClip("Initial");
       RecordingObserver<String> o = new RecordingObserver<>();
       Subscription subscription = RxClipboard.htmlChanges(instrumentation.getContext())
@@ -387,7 +387,7 @@ public class RxClipboardTest {
   }
 
   @Test public void initialNullHtmlChanges() {
-    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+    if (android.os.Build.VERSION.SDK_INT >= 16) {
       setHtmlClip("Initial", null);
       RecordingObserver<String> o = new RecordingObserver<>();
       Subscription subscription = RxClipboard.htmlChanges(instrumentation.getContext())
@@ -453,7 +453,7 @@ public class RxClipboardTest {
   }
 
   @Test public void shouldNotEmitHtmlItemsOnPreJB() {
-    if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+    if (android.os.Build.VERSION.SDK_INT < 16) {
       setClip("Initial");
       RecordingObserver<String> o = new RecordingObserver<>();
       Subscription subscription = RxClipboard.htmlChanges(instrumentation.getContext())
@@ -510,7 +510,7 @@ public class RxClipboardTest {
   }
 
   private void assertClipData(RecordingObserver<ClipData> o, ClipData value) {
-    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+    if (android.os.Build.VERSION.SDK_INT >= 16) {
       assertThat(o.takeNext().toString()).isEqualTo(value.toString());
     } else {
       assertThat(o.takeNext().getItemAt(0).getText()).isEqualTo(value.getItemAt(0).getText());
@@ -542,13 +542,13 @@ public class RxClipboardTest {
   }
 
   private void setHtmlClip(@NonNull String clip) {
-    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+    if (android.os.Build.VERSION.SDK_INT >= 16) {
       setClip(ClipData.newHtmlText("Html", "Basic", clip));
     }
   }
 
   private void setHtmlClip(@NonNull String label, @Nullable String clip) {
-    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+    if (android.os.Build.VERSION.SDK_INT >= 16) {
       setClip(ClipData.newHtmlText(label, clip, clip));
     }
   }
