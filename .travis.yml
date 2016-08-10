@@ -1,4 +1,4 @@
-sudo: false
+sudo: required
 
 language: android
 jdk: oraclejdk8
@@ -6,6 +6,7 @@ jdk: oraclejdk8
 env:
  global:
     - ANDROID_TARGET1=android-21
+    - ANDROID_TARGET2=android-15
     - ANDROID_ABI=armeabi-v7a
 
 android:
@@ -24,10 +25,16 @@ before_install:
 
 script:
   - echo no | android create avd --force -n test1 -t ${ANDROID_TARGET1} --abi ${ANDROID_ABI}
+  - echo no | android create avd --force -n test2 -t ${ANDROID_TARGET2} --abi ${ANDROID_ABI}
   - emulator -avd test1 -no-skin -no-audio -no-window &
-  - android-wait-for-emulator
+  - sh scripts/wait-for-first-emulator.sh
+  - "adb devices"
+  - emulator -avd test2 -no-skin -no-audio -no-window &
+  - sh scripts/wait-for-second-emulator.sh
+  - "adb devices"
   - adb -s emulator-5554 shell setprop dalvik.vm.dexopt-flags v=n,o=v
-  - sh script.sh
+  - adb -s emulator-5556 shell setprop dalvik.vm.dexopt-flags v=n,o=v
+  - sh scripts/script.sh
 
 notifications:
   email: true
