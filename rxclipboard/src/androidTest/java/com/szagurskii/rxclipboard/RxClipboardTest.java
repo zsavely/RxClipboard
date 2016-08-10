@@ -1,13 +1,11 @@
 package com.szagurskii.rxclipboard;
 
-import android.annotation.TargetApi;
 import android.app.Instrumentation;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.test.InstrumentationRegistry;
@@ -55,7 +53,7 @@ public class RxClipboardTest {
     Espresso.unregisterIdlingResources(viewDirtyIdler);
   }
 
-  @Test public void a1FirstTestWhenDeviceStarts_nullClipData() {
+  @Test public void a1FirstTestWhenDeviceStarts_nullPlainTextData() {
     RecordingObserver<String> o = new RecordingObserver<>();
     Subscription subscription = RxClipboard.textChanges(instrumentation.getContext())
         .subscribeOn(AndroidSchedulers.mainThread())
@@ -63,7 +61,7 @@ public class RxClipboardTest {
     o.assertNoMoreEvents();
   }
 
-  @Test public void a2SecondTestWhenDeviceStarts_nullClipData() {
+  @Test public void a2SecondTestWhenDeviceStarts_nullIntentData() {
     RecordingObserver<Intent> o = new RecordingObserver<>();
     Subscription subscription = RxClipboard.intentChanges(instrumentation.getContext())
         .subscribeOn(AndroidSchedulers.mainThread())
@@ -71,7 +69,7 @@ public class RxClipboardTest {
     o.assertNoMoreEvents();
   }
 
-  @Test public void a3ThirdTestWhenDeviceStarts_nullClipData() {
+  @Test public void a3ThirdTestWhenDeviceStarts_nullUriData() {
     RecordingObserver<Uri> o = new RecordingObserver<>();
     Subscription subscription = RxClipboard.uriChanges(instrumentation.getContext())
         .subscribeOn(AndroidSchedulers.mainThread())
@@ -87,7 +85,7 @@ public class RxClipboardTest {
     o.assertNoMoreEvents();
   }
 
-  @Test public void a5FifthTestWhenDeviceStarts_nullClipData() {
+  @Test public void a5FifthTestWhenDeviceStarts_nullHtmlData() {
     RecordingObserver<String> o = new RecordingObserver<>();
     Subscription subscription = RxClipboard.htmlChanges(instrumentation.getContext())
         .subscribeOn(AndroidSchedulers.mainThread())
@@ -95,7 +93,7 @@ public class RxClipboardTest {
     o.assertNoMoreEvents();
   }
 
-  @Test public void a6SixthTestWhenDeviceStarts_nullClipData() {
+  @Test public void a6SixthTestWhenDeviceStarts_nullTextAndHtmlData() {
     RecordingObserver<String> o = new RecordingObserver<>();
     Subscription subscription = RxClipboard.textAndHtmlChanges(instrumentation.getContext())
         .subscribeOn(AndroidSchedulers.mainThread())
@@ -130,9 +128,14 @@ public class RxClipboardTest {
     assertThat(o.takeNext()).isEqualTo("Initial");
 
     setAndAssert(o, "Next");
-    setHtmlAndAssert(o, "<p>Example</p>");
+    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+      setHtmlAndAssert(o, "<p>Example</p>");
+    }
+
     setAndAssert(o, "Stuff");
-    setHtmlAndAssert(o, "<ol><li>HTML Examples</li></ol>");
+    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+      setHtmlAndAssert(o, "<ol><li>HTML Examples</li></ol>");
+    }
 
     subscription.unsubscribe();
 
@@ -140,31 +143,34 @@ public class RxClipboardTest {
     o.assertNoMoreEvents();
   }
 
-  @TargetApi(Build.VERSION_CODES.JELLY_BEAN) @Test public void clipChangesWithHtml() {
-    final ClipData initialClipData = ClipData.newHtmlText("Label0", "This is a Heading",
-        "<!DOCTYPE html><html><head><title>Page Title</title></head><body><h1>This is a " +
-            "Heading</h1><p>This is a paragraph.</p></body></html>");
-    setClip(initialClipData);
-    RecordingObserver<ClipData> o = new RecordingObserver<>();
-    Subscription subscription = RxClipboard.clipChanges(instrumentation.getContext())
-        .subscribeOn(AndroidSchedulers.mainThread())
-        .subscribe(o);
-    assertClipData(o, initialClipData);
+  @Test public void clipChangesWithHtml() {
+    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+      ClipData initialClipData = ClipData.newHtmlText("Label0", "This is a Heading",
+          "<!DOCTYPE html><html><head><title>Page Title</title></head><body><h1>This is a " +
+              "Heading</h1><p>This is a paragraph.</p></body></html>");
 
-    setAndAssert(o, ClipData.newHtmlText("Label1", "https://www.google.com",
-        "<!DOCTYPE html><html><body>" +
-            "<a href=\"https://www.google.com\">This is a link</a></body></html>"));
-    setAndAssert(o, ClipData.newHtmlText("Label2", "Stuff", "<!DOCTYPE html><html><body><p>This " +
-        "is a paragraph.</p><p>This is a paragraph.</p><p>This is a paragraph.</p></body></html>"));
-    setAndAssert(o, ClipData.newHtmlText("Label3", "Works?", "<!DOCTYPE html><html><body><h1>This" +
-        " is heading 1</h1><h2>This is heading 2</h2><h3>This is heading 3</h3><h4>This is " +
-        "heading 4</h4><h5>This is heading 5</h5><h6>This is heading 6</h6></body></html>"));
+      setClip(initialClipData);
+      RecordingObserver<ClipData> o = new RecordingObserver<>();
+      Subscription subscription = RxClipboard.clipChanges(instrumentation.getContext())
+          .subscribeOn(AndroidSchedulers.mainThread())
+          .subscribe(o);
+      assertClipData(o, initialClipData);
 
-    subscription.unsubscribe();
+      setAndAssert(o, ClipData.newHtmlText("Label1", "https://www.google.com",
+          "<!DOCTYPE html><html><body>" +
+              "<a href=\"https://www.google.com\">This is a link</a></body></html>"));
+      setAndAssert(o, ClipData.newHtmlText("Label2", "Stuff", "<!DOCTYPE html><html><body><p>This " +
+          "is a paragraph.</p><p>This is a paragraph.</p><p>This is a paragraph.</p></body></html>"));
+      setAndAssert(o, ClipData.newHtmlText("Label3", "Works?", "<!DOCTYPE html><html><body><h1>This" +
+          " is heading 1</h1><h2>This is heading 2</h2><h3>This is heading 3</h3><h4>This is " +
+          "heading 4</h4><h5>This is heading 5</h5><h6>This is heading 6</h6></body></html>"));
 
-    setClip(ClipData.newHtmlText("Label4", "Silent", "<!DOCTYPE html><html><body><p><b>Hi" +
-        ".</b></p></body></html>"));
-    o.assertNoMoreEvents();
+      subscription.unsubscribe();
+
+      setClip(ClipData.newHtmlText("Label4", "Silent", "<!DOCTYPE html><html><body><p><b>Hi" +
+          ".</b></p></body></html>"));
+      o.assertNoMoreEvents();
+    }
   }
 
   @Test public void uriChanges() {
@@ -209,23 +215,26 @@ public class RxClipboardTest {
   }
 
   @Test public void htmlChanges() {
-    final String initialHtml = "<p><a href=\"https://www.google.com/\">Example Link</a></p>";
-    setHtmlClip(initialHtml);
-    RecordingObserver<String> o = new RecordingObserver<>();
-    Subscription subscription = RxClipboard.htmlChanges(instrumentation.getContext())
-        .subscribeOn(AndroidSchedulers.mainThread())
-        .subscribe(o);
-    assertThat(o.takeNext()).isEqualTo(initialHtml);
+    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+      final String initialHtml = "<p><a href=\"https://www.google.com/\">Example Link</a></p>";
+      setHtmlClip(initialHtml);
+      RecordingObserver<String> o = new RecordingObserver<>();
+      Subscription subscription = RxClipboard.htmlChanges(instrumentation.getContext())
+          .subscribeOn(AndroidSchedulers.mainThread())
+          .subscribe(o);
+      assertThat(o.takeNext()).isEqualTo(initialHtml);
 
-    setHtmlAndAssert(o, "<p><span style=\"font-size:10px;\">Small font</span>");
-    setHtmlAndAssert(o, "<span style=\"font-size:18px;\">Large font</span>");
-    setHtmlAndAssert(o, "<span style=\"font-size:12px;color:orange;\">Colored font</span>");
+      // Here we cannot set html clip in API < 16,
+      setHtmlAndAssert(o, "<p><span style=\"font-size:10px;\">Small font</span>");
+      setHtmlAndAssert(o, "<span style=\"font-size:18px;\">Large font</span>");
+      setHtmlAndAssert(o, "<span style=\"font-size:12px;color:orange;\">Colored font</span>");
 
-    subscription.unsubscribe();
+      subscription.unsubscribe();
 
-    setHtmlClip("<span style=\"font-size:12px;font-style:italic;\">" +
-        "Italic silent font</span> and more...</p>");
-    o.assertNoMoreEvents();
+      setHtmlClip("<span style=\"font-size:12px;font-style:italic;\">" +
+          "Italic silent font</span> and more...</p>");
+      o.assertNoMoreEvents();
+    }
   }
 
   @Test public void clipChangesWithText() {
@@ -290,24 +299,26 @@ public class RxClipboardTest {
   }
 
   @Test public void nullHtmlChanges() {
-    setHtmlClip("Initial");
-    RecordingObserver<String> o = new RecordingObserver<>();
-    Subscription subscription = RxClipboard.htmlChanges(instrumentation.getContext())
-        .subscribeOn(AndroidSchedulers.mainThread())
-        .subscribe(o);
-    assertThat(o.takeNext()).isEqualTo("Initial");
+    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+      setHtmlClip("Initial");
+      RecordingObserver<String> o = new RecordingObserver<>();
+      Subscription subscription = RxClipboard.htmlChanges(instrumentation.getContext())
+          .subscribeOn(AndroidSchedulers.mainThread())
+          .subscribe(o);
+      assertThat(o.takeNext()).isEqualTo("Initial");
 
-    setHtmlAndAssert(o, "Next");
-    setHtmlAndAssert(o, null, "");
-    setHtmlAndAssert(o, "Stuff");
-    setHtmlAndAssert(o, null, "");
-    setHtmlAndAssert(o, "Works?");
-    setHtmlAndAssert(o, null, "");
+      setHtmlAndAssert(o, "Next");
+      setHtmlAndAssert(o, null, "");
+      setHtmlAndAssert(o, "Stuff");
+      setHtmlAndAssert(o, null, "");
+      setHtmlAndAssert(o, "Works?");
+      setHtmlAndAssert(o, null, "");
 
-    subscription.unsubscribe();
+      subscription.unsubscribe();
 
-    setClip("", null);
-    o.assertNoMoreEvents();
+      setClip("", null);
+      o.assertNoMoreEvents();
+    }
   }
 
   @Test public void nullClipChanges() {
@@ -376,24 +387,26 @@ public class RxClipboardTest {
   }
 
   @Test public void initialNullHtmlChanges() {
-    setHtmlClip("Initial", null);
-    RecordingObserver<String> o = new RecordingObserver<>();
-    Subscription subscription = RxClipboard.htmlChanges(instrumentation.getContext())
-        .subscribeOn(AndroidSchedulers.mainThread())
-        .subscribe(o);
-    assertThat(o.takeNext()).isEqualTo("");
+    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+      setHtmlClip("Initial", null);
+      RecordingObserver<String> o = new RecordingObserver<>();
+      Subscription subscription = RxClipboard.htmlChanges(instrumentation.getContext())
+          .subscribeOn(AndroidSchedulers.mainThread())
+          .subscribe(o);
+      assertThat(o.takeNext()).isEqualTo("");
 
-    setHtmlAndAssert(o, "Next");
-    setHtmlAndAssert(o, null, "");
-    setHtmlAndAssert(o, "Stuff");
-    setHtmlAndAssert(o, null, "");
-    setHtmlAndAssert(o, "Works?");
-    setHtmlAndAssert(o, null, "");
+      setHtmlAndAssert(o, "Next");
+      setHtmlAndAssert(o, null, "");
+      setHtmlAndAssert(o, "Stuff");
+      setHtmlAndAssert(o, null, "");
+      setHtmlAndAssert(o, "Works?");
+      setHtmlAndAssert(o, null, "");
 
-    subscription.unsubscribe();
+      subscription.unsubscribe();
 
-    setClip("", null);
-    o.assertNoMoreEvents();
+      setClip("", null);
+      o.assertNoMoreEvents();
+    }
   }
 
   @Test public void initialNullClipChanges() {
@@ -439,6 +452,23 @@ public class RxClipboardTest {
     o.assertNoMoreEvents();
   }
 
+  @Test public void shouldNotEmitHtmlItemsOnPreJB() {
+    if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+      setClip("Initial");
+      RecordingObserver<String> o = new RecordingObserver<>();
+      Subscription subscription = RxClipboard.htmlChanges(instrumentation.getContext())
+          .subscribeOn(AndroidSchedulers.mainThread())
+          .subscribe(o);
+      o.assertNoMoreEvents();
+
+      setClip("Initial");
+      o.assertNoMoreEvents();
+
+      subscription.unsubscribe();
+      o.assertNoMoreEvents();
+    }
+  }
+
   private void setAndAssert(RecordingObserver<String> o, final String value) {
     setClip(value);
     assertThat(o.takeNext()).isEqualTo(value);
@@ -480,11 +510,11 @@ public class RxClipboardTest {
   }
 
   private void assertClipData(RecordingObserver<ClipData> o, ClipData value) {
-    assertThat(o.takeNext().toString()).isEqualTo(value.toString());
-  }
-
-  private void assertClipData(RecordingObserver<ClipData> o, ClipData value, ClipData assertionValue) {
-    assertThat(o.takeNext().toString()).isEqualTo(assertionValue.toString());
+    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+      assertThat(o.takeNext().toString()).isEqualTo(value.toString());
+    } else {
+      assertThat(o.takeNext().getItemAt(0)).isEqualTo(value.getItemAt(0));
+    }
   }
 
   private void assertIntent(RecordingObserver<Intent> o, Intent value) {
@@ -511,11 +541,15 @@ public class RxClipboardTest {
     clipboard.setPrimaryClip(clipData);
   }
 
-  @TargetApi(Build.VERSION_CODES.JELLY_BEAN) private void setHtmlClip(@NonNull String clip) {
-    setClip(ClipData.newHtmlText("Html", "Basic", clip));
+  private void setHtmlClip(@NonNull String clip) {
+    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+      setClip(ClipData.newHtmlText("Html", "Basic", clip));
+    }
   }
 
-  @TargetApi(Build.VERSION_CODES.JELLY_BEAN) private void setHtmlClip(@NonNull String label, @Nullable String clip) {
-    setClip(ClipData.newHtmlText(label, clip, clip));
+  private void setHtmlClip(@NonNull String label, @Nullable String clip) {
+    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+      setClip(ClipData.newHtmlText(label, clip, clip));
+    }
   }
 }
