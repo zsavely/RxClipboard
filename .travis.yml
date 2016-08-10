@@ -46,7 +46,7 @@ script:
   - sh scripts/move-coverage-report.sh
 
     # Kill the first emulator.
-  - sh scripts/kill-first-emulator.sh
+  - sh scripts/kill-emulator.sh
 
     # Start the second emulator.
   - emulator -avd test2 -no-skin -no-audio -no-window &
