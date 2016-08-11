@@ -5,8 +5,7 @@ jdk: oraclejdk8
 
 env:
  global:
-    - ANDROID_TARGET1=android-21
-    - ANDROID_TARGET2=android-15
+    - ANDROID_TARGET_15=android-15
     - ANDROID_ABI=armeabi-v7a
 
 android:
@@ -17,20 +16,18 @@ android:
     - android-24
     - build-tools-24.0.1
     - extra-android-m2repository
-    - sys-img-${ANDROID_ABI}-${ANDROID_TARGET1}
-    - sys-img-${ANDROID_ABI}-${ANDROID_TARGET2}
+    - sys-img-${ANDROID_ABI}-${ANDROID_TARGET_15}
 
 before_install:
  - chmod +x gradlew
  - pip install --user codecov
 
 script:
-    # Create two emulator avds.
-  - echo no | android create avd --force -n test1 -t ${ANDROID_TARGET1} --abi ${ANDROID_ABI}
-  - echo no | android create avd --force -n test2 -t ${ANDROID_TARGET2} --abi ${ANDROID_ABI}
+    # Create an emulator.
+  - echo no | android create avd --force -n test2 -t ${ANDROID_TARGET_15} --abi ${ANDROID_ABI}
 
     # Start the first emulator.
-  - emulator -avd test1 -no-skin -no-audio -no-window &
+  - emulator -avd test2 -no-skin -no-audio -no-window &
   - sh scripts/wait-for-emulator.sh
 
     # Just to check whether the device is seen by ADB.
@@ -41,28 +38,6 @@ script:
 
     # Run the script.
   - sh scripts/script.sh
-
-    # Move the coverage report from the first device.
-  - sh scripts/move-coverage-report.sh
-
-    # Kill the first emulator.
-  - sh scripts/kill-emulator.sh
-
-    # Start the second emulator.
-  - emulator -avd test2 -no-skin -no-audio -no-window &
-  - sh scripts/wait-for-emulator.sh
-
-    # Just to check whether the device is seen by ADB.
-  - "adb devices"
-
-    # Unlock the device.
-  - adb -s emulator-5554 shell input keyevent 82 &
-
-    # Run tests on another device.
-  - sh scripts/script-just-ui.sh
-
-    # Move the coverage report from the first device back to the debug folder.
-  - sh scripts/move-coverage-report-back.sh
 
 notifications:
   email: true
