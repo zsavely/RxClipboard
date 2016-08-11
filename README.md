@@ -9,7 +9,7 @@ RxJava binding APIs for Android Clipboard.
 
 ### Dependency
 ```groovy
-compile 'com.szagurskii:rxclipboard:1.0.1'
+compile 'com.szagurskii:rxclipboard:1.0.2'
 ```
 
 ### How to use

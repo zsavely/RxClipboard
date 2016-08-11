@@ -4,7 +4,7 @@ apply plugin: 'com.jfrog.bintray'
 apply from: '../jacoco.gradle'
 
 def isCi = "true".equals(System.getenv("CI"))
-def localLibraryVersion = '1.0.1'
+def localLibraryVersion = '1.0.2'
 def description = 'RxJava binding APIs for Android\'s clipboard.'
 version = localLibraryVersion
 group = 'com.szagurskii'
@@ -16,7 +16,7 @@ android {
   defaultConfig {
     minSdkVersion 11
     targetSdkVersion 24
-    versionCode 2
+    versionCode 3
     versionName localLibraryVersion
     testInstrumentationRunner 'com.szagurskii.rxclipboard.RxBindingTestRunner'
   }
