@@ -31,7 +31,8 @@ public final class RxClipboard {
   }
 
   /**
-   * Create an observable of text and html text changes in Clipboard.
+   * Create an observable of text and html text changes in Clipboard. Can be used from
+   * {@link android.os.Build.VERSION_CODES#JELLY_BEAN}. Otherwise, you will get only text updates.
    */
   @CheckResult @NonNull
   public static Observable<String> textAndHtmlChanges(@NonNull Context context) {
@@ -41,7 +42,7 @@ public final class RxClipboard {
 
   /**
    * Create an observable of html text changes in Clipboard. Can be used from
-   * {@link android.os.Build.VERSION_CODES#JELLY_BEAN}.
+   * {@link android.os.Build.VERSION_CODES#JELLY_BEAN}. Otherwise, you won't get any updates.
    */
   @TargetApi(Build.VERSION_CODES.JELLY_BEAN) @CheckResult @NonNull
   public static Observable<String> htmlChanges(@NonNull Context context) {

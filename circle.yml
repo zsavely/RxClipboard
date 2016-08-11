@@ -12,12 +12,12 @@ dependencies:
     - chmod +x gradlew
     - echo y | android update sdk --no-ui --all --filter "platform-tools"
     - echo y | android update sdk --no-ui --all --filter "tools"
-    - echo y | android update sdk --no-ui --all --filter "android-23"
+    - echo y | android update sdk --no-ui --all --filter "android-24"
     - echo y | android update sdk --no-ui --all --filter "extra-google-m2repository"
     - echo y | android update sdk --no-ui --all --filter "extra-android-m2repository"
     - echo y | android update sdk --no-ui --all --filter "extra-android-support"
     - echo y | android update sdk --no-ui --all --filter "sys-img-armeabi-v7a-android-22"
-    - echo y | android update sdk --no-ui --all --filter "build-tools-23.0.3"
+    - echo y | android update sdk --no-ui --all --filter "build-tools-24.0.1"
 
 test:
   override:
@@ -31,6 +31,6 @@ test:
     - sleep 30
     - adb shell input keyevent 82
     # run the script
-    - sh script.sh
-  post:
-    - bash <(curl -s https://codecov.io/bash)
+    - sh scripts/script.sh
+    # upload result to codecov
+    - pip install --user codecov && codecov

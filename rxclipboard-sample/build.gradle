@@ -9,12 +9,12 @@ android {
       storePassword 'RxClipboard'
     }
   }
-  compileSdkVersion 23
-  buildToolsVersion "23.0.3"
+  compileSdkVersion 24
+  buildToolsVersion "24.0.1"
   defaultConfig {
     applicationId "com.szagurskii.rxclipboard.sample"
     minSdkVersion 11
-    targetSdkVersion 23
+    targetSdkVersion 24
     versionCode 1
     versionName "1.0"
   }
@@ -40,26 +40,6 @@ android {
   }
 }
 
-configurations.all {
-  resolutionStrategy {
-    // Force our version of support-annotations, we have a conflict between app and androidTest dependency resolution.
-    force libraries.supportAnnotations
-  }
-}
-
 dependencies {
   compile project(':rxclipboard')
-
-  androidTestCompile libraries.junit
-  androidTestCompile libraries.supportTestRunner
-  androidTestCompile libraries.supportTestRules
-  androidTestCompile libraries.truth
-  androidTestCompile libraries.espressoCore
-  androidTestCompile libraries.espressoContrib
-
-  testCompile libraries.junit
-  testCompile libraries.robolectric
-  testCompile libraries.assertJ
-  testCompile libraries.equalsVerifier
-  testCompile libraries.mockitoCore
 }

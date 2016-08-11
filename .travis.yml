@@ -1,33 +1,43 @@
-sudo: false
+sudo: required
 
 language: android
 jdk: oraclejdk8
 
 env:
  global:
-    - ANDROID_TARGET1=android-21
+    - ANDROID_TARGET_15=android-15
     - ANDROID_ABI=armeabi-v7a
 
 android:
   components:
-    - platform-tools
     - tools
-    - android-23
-    - build-tools-23.0.3
+    - tools
+    - platform-tools
+    - android-24
+    - build-tools-24.0.1
     - extra-android-m2repository
-    - sys-img-${ANDROID_ABI}-${ANDROID_TARGET1}
-    - sys-img-${ANDROID_ABI}-${ANDROID_TARGET2}
+    - sys-img-${ANDROID_ABI}-${ANDROID_TARGET_15}
 
 before_install:
  - chmod +x gradlew
  - pip install --user codecov
 
 script:
-  - echo no | android create avd --force -n test1 -t ${ANDROID_TARGET1} --abi ${ANDROID_ABI}
-  - emulator -avd test1 -no-skin -no-audio -no-window &
-  - android-wait-for-emulator
-  - adb -s emulator-5554 shell setprop dalvik.vm.dexopt-flags v=n,o=v
-  - sh script.sh
+    # Create an emulator.
+  - echo no | android create avd --force -n test2 -t ${ANDROID_TARGET_15} --abi ${ANDROID_ABI}
+
+    # Start the first emulator.
+  - emulator -avd test2 -no-skin -no-audio -no-window &
+  - sh scripts/wait-for-emulator.sh
+
+    # Just to check whether the device is seen by ADB.
+  - "adb devices"
+
+    # Unlock the device.
+  - adb -s emulator-5554 shell input keyevent 82 &
+
+    # Run the script.
+  - sh scripts/script.sh
 
 notifications:
   email: true
@@ -41,6 +51,6 @@ cache:
     - $HOME/.gradle
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
-    
+
 after_success:
 - codecov
