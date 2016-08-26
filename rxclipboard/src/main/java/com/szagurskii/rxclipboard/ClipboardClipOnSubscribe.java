@@ -12,7 +12,7 @@ import rx.Subscriber;
  * @author Savelii Zagurskii
  */
 final class ClipboardClipOnSubscribe implements Observable.OnSubscribe<ClipData> {
-  @NonNull private final ClipboardManager clipboard;
+  @NonNull final ClipboardManager clipboard;
 
   public ClipboardClipOnSubscribe(@NonNull ClipboardManager clipboard) {
     this.clipboard = clipboard;
@@ -37,7 +37,7 @@ final class ClipboardClipOnSubscribe implements Observable.OnSubscribe<ClipData>
     propagate(subscriber);
   }
 
-  private void propagate(@NonNull Subscriber<? super ClipData> subscriber) {
+  void propagate(@NonNull Subscriber<? super ClipData> subscriber) {
     if (clipboard.hasPrimaryClip()) {
       subscriber.onNext(clipboard.getPrimaryClip());
     }

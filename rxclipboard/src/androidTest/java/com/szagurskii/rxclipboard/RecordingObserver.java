@@ -70,7 +70,7 @@ public final class RecordingObserver<T> implements Observer<T> {
   private final class OnNext {
     final T value;
 
-    private OnNext(T value) {
+    OnNext(T value) {
       this.value = value;
     }
 
@@ -80,15 +80,18 @@ public final class RecordingObserver<T> implements Observer<T> {
   }
 
   private final class OnCompleted {
+    OnCompleted() {
+    }
+
     @Override public String toString() {
       return "OnCompleted";
     }
   }
 
   private final class OnError {
-    private final Throwable throwable;
+    final Throwable throwable;
 
-    private OnError(Throwable throwable) {
+    OnError(Throwable throwable) {
       this.throwable = throwable;
     }
 

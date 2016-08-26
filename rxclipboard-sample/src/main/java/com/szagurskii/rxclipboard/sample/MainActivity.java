@@ -13,7 +13,7 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 
 public class MainActivity extends Activity {
-  private static final String TAG = MainActivity.class.getSimpleName();
+  static final String TAG = MainActivity.class.getSimpleName();
 
   private Subscription subscription;
 
