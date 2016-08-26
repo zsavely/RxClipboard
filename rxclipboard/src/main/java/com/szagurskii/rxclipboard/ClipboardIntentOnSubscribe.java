@@ -14,7 +14,7 @@ import rx.Subscriber;
  * @author Savelii Zagurskii
  */
 final class ClipboardIntentOnSubscribe implements Observable.OnSubscribe<Intent> {
-  @NonNull private final ClipboardManager clipboard;
+  @NonNull final ClipboardManager clipboard;
 
   public ClipboardIntentOnSubscribe(@NonNull ClipboardManager clipboard) {
     this.clipboard = clipboard;
@@ -39,7 +39,7 @@ final class ClipboardIntentOnSubscribe implements Observable.OnSubscribe<Intent>
     propagate(subscriber);
   }
 
-  private void propagate(@NonNull Subscriber<? super Intent> subscriber) {
+  void propagate(@NonNull Subscriber<? super Intent> subscriber) {
     if (clipboard.hasPrimaryClip()) {
       ClipData cd = clipboard.getPrimaryClip();
       if (cd.getDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_INTENT)) {

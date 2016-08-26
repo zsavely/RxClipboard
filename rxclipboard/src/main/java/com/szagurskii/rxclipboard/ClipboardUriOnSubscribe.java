@@ -14,7 +14,7 @@ import rx.Subscriber;
  * @author Savelii Zagurskii
  */
 final class ClipboardUriOnSubscribe implements Observable.OnSubscribe<Uri> {
-  @NonNull private final ClipboardManager clipboard;
+  @NonNull final ClipboardManager clipboard;
 
   public ClipboardUriOnSubscribe(@NonNull ClipboardManager clipboard) {
     this.clipboard = clipboard;
@@ -39,7 +39,7 @@ final class ClipboardUriOnSubscribe implements Observable.OnSubscribe<Uri> {
     propagate(subscriber);
   }
 
-  private void propagate(@NonNull Subscriber<? super Uri> subscriber) {
+  void propagate(@NonNull Subscriber<? super Uri> subscriber) {
     if (clipboard.hasPrimaryClip()) {
       ClipData cd = clipboard.getPrimaryClip();
       if (cd.getDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_URILIST)) {

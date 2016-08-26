@@ -17,7 +17,7 @@ import rx.Subscriber;
 final class ClipboardHtmlOnSubscribe implements Observable.OnSubscribe<String> {
   private static final boolean JB = Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN;
 
-  @NonNull private final ClipboardManager clipboard;
+  @NonNull final ClipboardManager clipboard;
 
   public ClipboardHtmlOnSubscribe(@NonNull ClipboardManager clipboard) {
     this.clipboard = clipboard;
@@ -42,7 +42,7 @@ final class ClipboardHtmlOnSubscribe implements Observable.OnSubscribe<String> {
     propagate(subscriber);
   }
 
-  @SuppressLint("NewApi") private void propagate(@NonNull Subscriber<? super String> subscriber) {
+  @SuppressLint("NewApi") void propagate(@NonNull Subscriber<? super String> subscriber) {
     if (clipboard.hasPrimaryClip()) {
       ClipData cd = clipboard.getPrimaryClip();
       if (JB) {
