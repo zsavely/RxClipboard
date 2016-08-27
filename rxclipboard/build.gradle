@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
+apply plugin: 'com.github.ben-manes.versions'
 apply from: '../jacoco.gradle'
 
 def isCi = "true".equals(System.getenv("CI"))
@@ -11,7 +12,7 @@ group = 'com.szagurskii'
 
 android {
   compileSdkVersion 24
-  buildToolsVersion "24.0.1"
+  buildToolsVersion "24.0.2"
 
   defaultConfig {
     minSdkVersion 11
