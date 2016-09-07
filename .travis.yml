@@ -20,6 +20,7 @@ android:
 
 before_install:
  - chmod +x gradlew
+ - chmod +x .buildscript/deploy_snapshot.sh
  - pip install --user codecov
 
 script:
@@ -53,4 +54,5 @@ cache:
     - $HOME/.gradle/wrapper/
 
 after_success:
-- codecov
+  - .buildscript/deploy_snapshot.sh
+  - codecov

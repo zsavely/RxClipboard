@@ -54,6 +54,20 @@ Subscription subscriptionClipChanges = RxClipboard.clipChanges(this)
     });
 ```
 
+### Snapshot
+```groovy
+repositories {
+  mavenCentral()
+  maven {
+    url "https://oss.sonatype.org/content/repositories/snapshots"
+  }
+}
+```
+
+```groovy
+compile 'com.szagurskii:rxclipboard:1.0.3-SNAPSHOT'
+```
+
 Inspired by Jake Wharton's [RxBinding](https://github.com/JakeWharton/RxBinding).
 
 ### License
