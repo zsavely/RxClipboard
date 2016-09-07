@@ -8,10 +8,7 @@ buildscript {
   }
   dependencies {
     classpath gradlePlugins.androidBuildTools
-    classpath gradlePlugins.androidMavenGradlePlugin
-    classpath gradlePlugins.gradleBintrayPlugin
     classpath gradlePlugins.jacoco
-    classpath gradlePlugins.gradleVersionsPlugin
 
     // NOTE: Do not place your application dependencies here; they belong
     // in the individual module build.gradle files
@@ -38,4 +35,32 @@ subprojects {
       logging.level = LogLevel.LIFECYCLE
     }
   }
+}
+
+task wrapper(type: Wrapper) {
+  gradleVersion = '2.14.1'
+}
+
+def isCi() {
+  project.hasProperty('CI') && CI.equals('true')
+}
+
+def isReleaseBuild() {
+  return VERSION_NAME.contains("SNAPSHOT") == false
+}
+
+def getReleaseRepositoryUrl() {
+  return hasProperty('RELEASE_REPOSITORY_URL') ? RELEASE_REPOSITORY_URL : "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+}
+
+def getSnapshotRepositoryUrl() {
+  return hasProperty('SNAPSHOT_REPOSITORY_URL') ? SNAPSHOT_REPOSITORY_URL : "https://oss.sonatype.org/content/repositories/snapshots/"
+}
+
+def getRepositoryUsername() {
+  return hasProperty('NEXUS_USERNAME') ? NEXUS_USERNAME : ""
+}
+
+def getRepositoryPassword() {
+  return hasProperty('NEXUS_PASSWORD') ? NEXUS_PASSWORD : ""
 }

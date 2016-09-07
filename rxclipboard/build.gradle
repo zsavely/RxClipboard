@@ -1,14 +1,5 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
-apply plugin: 'com.jfrog.bintray'
-apply plugin: 'com.github.ben-manes.versions'
 apply from: '../jacoco.gradle'
-
-def isCi = "true".equals(System.getenv("CI"))
-def localLibraryVersion = '1.0.2'
-def description = 'RxJava binding APIs for Android\'s clipboard.'
-version = localLibraryVersion
-group = 'com.szagurskii'
 
 android {
   compileSdkVersion 24
@@ -17,13 +8,10 @@ android {
   defaultConfig {
     minSdkVersion 11
     targetSdkVersion 24
-    versionCode 3
-    versionName localLibraryVersion
+
     testInstrumentationRunner 'com.szagurskii.rxclipboard.RxBindingTestRunner'
   }
   buildTypes {
-    release {
-    }
     debug {
       testCoverageEnabled true
     }
@@ -78,94 +66,4 @@ dependencies {
   testCompile libraries.mockitoCore
 }
 
-if (!isCi) {
-  ext {
-    bintrayRepo = 'maven'
-    bintrayName = 'rxclipboard'
-
-    publishedGroupId = 'com.szagurskii'
-    libraryName = 'RxClipboard'
-    artifact = 'rxclipboard'
-
-    libraryDescription = description
-
-    siteUrl = 'https://github.com/zsavely/RxClipboard'
-    gitUrl = 'https://github.com/zsavely/RxClipboard.git'
-
-    libraryVersion = localLibraryVersion
-
-    developerId = 'zsavely'
-    developerName = 'Savelii Zagurskii'
-    developerEmail = 'saveliyzagurskiy@gmail.com'
-
-    licenseName = 'The MIT License (MIT)'
-    licenseUrl = 'https://opensource.org/licenses/MIT'
-    allLicenses = ["MIT"]
-  }
-
-  apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
-
-  if (project.hasProperty("android")) {
-    // Android libraries
-    task sourcesJar(type: Jar) {
-      classifier = 'sources'
-      from android.sourceSets.main.java.srcDirs
-    }
-
-    task javadoc(type: Javadoc) {
-      source = android.sourceSets.main.java.srcDirs
-      classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-      classpath += configurations.javadocDeps
-    }
-  } else {
-    // Java libraries
-    task sourcesJar(type: Jar, dependsOn: classes) {
-      classifier = 'sources'
-      from sourceSets.main.allSource
-    }
-  }
-
-  task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-  }
-
-  artifacts {
-    archives javadocJar
-    archives sourcesJar
-  }
-
-  // Bintray
-  Properties properties = new Properties()
-  properties.load(project.rootProject.file('local.properties').newDataInputStream())
-
-  bintray {
-    user = properties.getProperty("bintray.user")
-    key = properties.getProperty("bintray.apikey")
-
-    configurations = ['archives']
-    pkg {
-      repo = bintrayRepo
-      name = bintrayName
-      desc = libraryDescription
-      issueTrackerUrl = siteUrl + '/issues'
-      websiteUrl = siteUrl
-      githubRepo = 'zsavely/rxclipboard'
-      githubReleaseNotesFile = 'README.md'
-      vcsUrl = gitUrl
-      licenses = allLicenses
-      publish = true
-      publicDownloadNumbers = true
-
-      version {
-        name = localLibraryVersion
-        vcsTag = 'v' + localLibraryVersion
-        gpg {
-          sign = true // Determines whether to GPG sign the files. The default is false.
-          passphrase = properties.getProperty("bintray.gpg.password")
-          // Optional. The passphrase for GPG signing'.
-        }
-      }
-    }
-  }
-}
+apply from: rootProject.file('gradle/gradle-maven-push.gradle')
