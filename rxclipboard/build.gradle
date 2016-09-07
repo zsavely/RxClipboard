@@ -37,18 +37,10 @@ android {
   }
 }
 
-configurations {
-  javadocDeps
-}
-
 dependencies {
   compile libraries.rxJava
   compile libraries.rxAndroid
   compile libraries.supportAnnotations
-
-  javadocDeps libraries.rxJava
-  javadocDeps libraries.rxAndroid
-  javadocDeps libraries.supportAnnotations
 
   androidTestCompile libraries.junit
   androidTestCompile libraries.supportTestRunner
