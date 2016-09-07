@@ -57,7 +57,6 @@ Subscription subscriptionClipChanges = RxClipboard.clipChanges(this)
 ### Snapshot
 ```groovy
 repositories {
-  mavenCentral()
   maven {
     url "https://oss.sonatype.org/content/repositories/snapshots"
   }
