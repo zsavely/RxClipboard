@@ -21,8 +21,10 @@ dependencies:
 
 test:
   override:
+    # Create an emulator.
+    - echo no | android create avd --force -n test -t android-15 --abi armeabi-v7a
     # start the emulator
-    - emulator -avd circleci-android22 -noaudio -no-window:
+    - emulator -avd test -noaudio -no-window:
         background: true
         parallel: true
     # wait for it to have booted
