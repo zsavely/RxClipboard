@@ -28,7 +28,7 @@ script:
   - echo no | android create avd --force -n test2 -t ${ANDROID_TARGET_15} --abi ${ANDROID_ABI}
 
     # Start the first emulator.
-  - emulator -avd test2 -no-skin -no-audio -no-window &
+  - emulator -avd test2 -no-skin -noaudio -no-window &
   - sh scripts/wait-for-emulator.sh
 
     # Just to check whether the device is seen by ADB.
