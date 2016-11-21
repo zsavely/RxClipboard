@@ -5,7 +5,7 @@ jdk: oraclejdk8
 
 env:
  global:
-    - ANDROID_TARGET_15=android-15
+    - ANDROID_TARGET_21=android-21
     - ANDROID_ABI=armeabi-v7a
 
 android:
@@ -16,7 +16,7 @@ android:
     - android-24
     - build-tools-24.0.2
     - extra-android-m2repository
-    - sys-img-${ANDROID_ABI}-${ANDROID_TARGET_15}
+    - sys-img-${ANDROID_ABI}-${ANDROID_TARGET_21}
 
 before_install:
  - chmod +x gradlew
@@ -25,10 +25,10 @@ before_install:
 
 script:
     # Create an emulator.
-  - echo no | android create avd --force -n test2 -t ${ANDROID_TARGET_15} --abi ${ANDROID_ABI}
+  - echo no | android create avd --force -n test2 -t ${ANDROID_TARGET_21} --abi ${ANDROID_ABI}
 
     # Start the first emulator.
-  - emulator -avd test2 -no-skin -no-audio -no-window &
+  - emulator -avd test2 -no-audio -no-window &
   - sh scripts/wait-for-emulator.sh
 
     # Just to check whether the device is seen by ADB.
