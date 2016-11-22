@@ -39,7 +39,6 @@ android {
 
 dependencies {
   compile libraries.rxJava
-  compile libraries.rxAndroid
   compile libraries.supportAnnotations
 
   androidTestCompile libraries.junit
@@ -49,6 +48,7 @@ dependencies {
   androidTestCompile libraries.espressoCore
   androidTestCompile libraries.espressoContrib
   androidTestCompile libraries.awaitility
+  androidTestCompile libraries.rxAndroid
 
   testCompile libraries.junit
   testCompile libraries.truth
